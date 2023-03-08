@@ -1,0 +1,2 @@
+# nextEvents
+Praticing Next.js
