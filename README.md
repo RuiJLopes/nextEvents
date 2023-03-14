@@ -1,2 +1,2 @@
 # nextEvents
-Praticing Next.js
+Small project to explore the possibilities of next.js
