@@ -8,6 +8,7 @@ import {
   getEventById,
   getFeaturedEvents,
 } from "@/helpers/api-util";
+import Head from "next/head";
 
 export default function EventDetailPage(props) {
   if (!props.selectedEvent) {
@@ -24,6 +25,10 @@ export default function EventDetailPage(props) {
   }
   return (
     <>
+      <Head>
+        <title>{props.selectedEvent.title}</title>
+        <meta name="description" content={props.selectedEvent.description} />
+      </Head>
       <EventSummary title={props.selectedEvent.title} />
       <EventLogistics
         date={props.selectedEvent.date}
