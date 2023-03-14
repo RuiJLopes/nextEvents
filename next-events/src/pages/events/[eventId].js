@@ -3,41 +3,59 @@ import EventContent from "@/components/event-detail/event-content";
 import EventLogistics from "@/components/event-detail/event-logistics";
 import EventSummary from "@/components/event-detail/event-summary";
 import Button from "@/components/ui/button";
-import { getEventById } from "@/dummy-ddata";
-import { useRouter } from "next/router";
+import {
+  getAllEvents,
+  getEventById,
+  getFeaturedEvents,
+} from "@/helpers/api-util";
 
-export default function EventDetailPage() {
-  const router = useRouter();
-
-  const eventId = router.query.eventId;
-  console.log(router.query.eventId);
-
-  const event = getEventById(eventId);
-
-  if (!event) {
+export default function EventDetailPage(props) {
+  if (!props.selectedEvent) {
     return (
       <>
         <ErrorAlert>
-          <p>No Event Found</p>
+          <p>Loading...</p>
         </ErrorAlert>
         <div className="center">
-          <Button href="/events">Show All Events</Button>
+          <Button href="/">Show All Events</Button>
         </div>
       </>
     );
   }
   return (
     <>
-      <EventSummary title={event.title} />
+      <EventSummary title={props.selectedEvent.title} />
       <EventLogistics
-        date={event.date}
-        address={event.location}
-        image={event.image}
-        imageAlt={event.title}
+        date={props.selectedEvent.date}
+        address={props.selectedEvent.location}
+        image={props.selectedEvent.image}
+        imageAlt={props.selectedEvent.title}
       />
       <EventContent>
-        <p>{event.description}</p>
+        <p>{props.selectedEvent.description}</p>
       </EventContent>
     </>
   );
+}
+
+export async function getStaticProps(context) {
+  const eventId = context.params.eventId;
+  const event = await getEventById(eventId);
+
+  return {
+    props: { selectedEvent: event },
+    revalidate: 30,
+  };
+}
+
+export async function getStaticPaths() {
+  const events = await getFeaturedEvents();
+
+  const paths = events.map((event) => ({
+    params: { eventId: event.id },
+  }));
+  return {
+    paths: paths,
+    fallback: true,
+  };
 }
