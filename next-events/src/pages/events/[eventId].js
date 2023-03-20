@@ -2,6 +2,7 @@ import ErrorAlert from "@/components/error-alert/error-alert";
 import EventContent from "@/components/event-detail/event-content";
 import EventLogistics from "@/components/event-detail/event-logistics";
 import EventSummary from "@/components/event-detail/event-summary";
+import Comments from "@/components/input/comments";
 import Button from "@/components/ui/button";
 import {
   getAllEvents,
@@ -11,6 +12,7 @@ import {
 import Head from "next/head";
 
 export default function EventDetailPage(props) {
+  const { selectedEvent } = props;
   if (!props.selectedEvent) {
     return (
       <>
@@ -26,19 +28,20 @@ export default function EventDetailPage(props) {
   return (
     <>
       <Head>
-        <title>{props.selectedEvent.title}</title>
-        <meta name="description" content={props.selectedEvent.description} />
+        <title>{selectedEvent.title}</title>
+        <meta name="description" content={selectedEvent.description} />
       </Head>
-      <EventSummary title={props.selectedEvent.title} />
+      <EventSummary title={selectedEvent.title} />
       <EventLogistics
-        date={props.selectedEvent.date}
-        address={props.selectedEvent.location}
-        image={props.selectedEvent.image}
-        imageAlt={props.selectedEvent.title}
+        date={selectedEvent.date}
+        address={selectedEvent.location}
+        image={selectedEvent.image}
+        imageAlt={selectedEvent.title}
       />
       <EventContent>
-        <p>{props.selectedEvent.description}</p>
+        <p>{selectedEvent.description}</p>
       </EventContent>
+      <Comments eventId={selectedEvent.id} />
     </>
   );
 }
