@@ -1,7 +1,5 @@
 export async function getAllEvents() {
-  const reponse = await fetch(
-    "https://react-practice-backend-default-rtdb.firebaseio.com/events.json"
-  );
+  const reponse = await fetch(process.env.FIREBASE_CLIENT_URL);
 
   const data = await reponse.json();
 
